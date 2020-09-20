@@ -17,6 +17,7 @@ import javax.persistence.Table;
 
 
 import com.devsuperior.entities.enums.Platform;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "tb_game")
