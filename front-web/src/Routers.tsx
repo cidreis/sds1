@@ -9,7 +9,7 @@ const Routes = () => (
     <BrowserRouter>
     <Header />
         <Switch>
-            <Route path="/" exect>
+            <Route path="/" exact>
                 <Home />
             </Route>
             <Route path="/records">
