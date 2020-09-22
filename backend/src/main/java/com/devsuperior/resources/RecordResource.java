@@ -1,7 +1,10 @@
 package com.devsuperior.resources;
 
 import java.time.Instant;
-import java.util.List;
+
+import com.devsuperior.dto.RecordDTO;
+import com.devsuperior.dto.RecordInsertDTO;
+import com.devsuperior.services.RecordService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,10 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.devsuperior.dto.RecordDTO;
-import com.devsuperior.dto.RecordInsertDTO;
-import com.devsuperior.services.RecordService;
-
 @RestController
 @RequestMapping(value = "/records")
 public class RecordResource {
@@ -27,31 +26,30 @@ public class RecordResource {
 	private RecordService service;
 
 	@PostMapping
-	public ResponseEntity<RecordDTO> insert(@RequestBody RecordInsertDTO dto){
-		RecordDTO newDTO = service.insert(dto);
+	public ResponseEntity<RecordDTO> insert(@RequestBody final RecordInsertDTO dto) {
+		final RecordDTO newDTO = service.insert(dto);
 		return ResponseEntity.ok().body(newDTO);
-		
+
 	}
-	
+
 	@GetMapping
-	public ResponseEntity<Page<RecordDTO>> findAll(
-			@RequestParam(value = "min", defaultValue = "") String min,
-			@RequestParam(value = "max", defaultValue = "") String max,
-			@RequestParam(value = "page", defaultValue = "0") Integer page,
+	public ResponseEntity<Page<RecordDTO>> findAll(@RequestParam(value = "min", defaultValue = "") final String min,
+			@RequestParam(value = "max", defaultValue = "") final String max,
+			@RequestParam(value = "page", defaultValue = "0") final Integer page,
 			@RequestParam(value = "linesPerPage", defaultValue = "12") Integer linesPerPage,
-			@RequestParam(value = "orderBy", defaultValue = "moment") String orderBy,
-			@RequestParam(value = "direction", defaultValue = "DESC") String direction){
-		
-		Instant minDate = ("".equals(min)) ? null : Instant.parse(min);
-		Instant maxDate = ("".equals(max)) ? null : Instant.parse(max);
+			@RequestParam(value = "orderBy", defaultValue = "moment") final String orderBy,
+			@RequestParam(value = "direction", defaultValue = "DESC") final String direction) {
+
+		final Instant minDate = ("".equals(min)) ? null : Instant.parse(min);
+		final Instant maxDate = ("".equals(max)) ? null : Instant.parse(max);
 
 		if (linesPerPage == 0) {
 			linesPerPage = Integer.MAX_VALUE;
 		}
-		
-		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
-		
-		Page<RecordDTO> list = service.findByMoments(minDate, maxDate, pageRequest);
+
+		final PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+
+		final Page<RecordDTO> list = service.findByMoments(minDate, maxDate, pageRequest);
 		return ResponseEntity.ok().body(list);
 	}
 }
